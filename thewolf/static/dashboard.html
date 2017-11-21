@@ -1,0 +1,185 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>The Wolf</title>
+  <meta name="author" content="Jan Hosang">
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="style/loadbar.css">
+  <link rel="stylesheet" href="style/roboto.css">
+  <link rel="stylesheet" href="style/style.css">
+  <link rel="stylesheet" href="style/weather-icons.min.css">
+  <link rel="stylesheet" href="style/font-awesome.min.css">
+  <script src="js/jquery-3.2.1.min.js"></script>
+  <script src="js/jquery-dateFormat.min.js"></script>
+  <script src="js/progressbar.min.js"></script>
+  <script src="js/loadbar.js"></script>
+  <script src="js/scripts.js"></script>
+  <script src="js/google.js"></script>
+  <script src="js/trello.js"></script>
+  <script src="js/pomodoro.js"></script>
+  <script src="https://apis.google.com/js/api.js"></script>
+</head>
+
+<body>
+  <div id="dim-screen"></div>
+  <div id="load-bar">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+  </div>
+
+  <div id="container" class="fit-grid">
+    <div id="navigation">
+      <button data-page="dashboard" class="nav default">
+        <i class="fa fa-desktop" aria-hidden="true"></i>
+      </button>
+      <button data-page="calendar" class="nav">
+        <i class="fa fa-calendar" aria-hidden="true"></i>
+      </button>
+      <button data-page="trello" class="nav">
+        <i class="fa fa-trello" aria-hidden="true"></i>
+      </button>
+      <button data-page="pomodoro" class="nav">
+        <i class="fa fa-hourglass" aria-hidden="true"></i>
+      </button>
+      <button data-page="productivity" class="nav">
+        <i class="fa fa-tachometer" aria-hidden="true"></i>
+      </button>
+      <button data-page="google" class="nav">
+        <i class="fa fa-google" aria-hidden="true"></i>
+      </button>
+      <button data-page="location" class="nav" id="location-button">
+        <i class="fa fa-map-marker" aria-hidden="true"></i>
+      </button>
+      <button id="refresh">
+        <i class="fa fa-refresh" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <div class="page fit-grid" id="dashboard">
+      <div id="timer-progressbar">
+        <div id="progressbar"></div>
+      </div>
+
+      <div class="panel" id="agenda-today">
+        <div class="title">Coming up</div>
+        <div id="agenda-today-list">
+            ...
+        </div>
+      </div>
+      <div class="panel fit-grid" id="task">
+        <div id="task-icon" class="icon">
+          <i class="fa fa-trello" aria-hidden="true"></i>
+        </div>
+        <div id="task-count" class="unimportant">0</div>
+        <ul id="task-current"></ul>
+      </div>
+      <div id="timer-box">
+        <div class="panel" id="timer">
+          <div class="icon" id="timer-icon">
+            <i class="fa fa-hourglass" aria-hidden="true"></i>
+            <i class="fa fa-coffee" aria-hidden="true"></i>
+            <i class="fa fa-laptop" aria-hidden="true"></i>
+          </div>
+          <div id="timer-work-count" class="unimportant">0</div>
+          <div id="timer-time">0:00</div>
+        </div>
+        <div id="timer-buttons">
+          <button id="timer-playpause">
+            <i class="fa fa-play" aria-hidden="true"></i>
+          </button>
+          <button id="timer-abort">
+            <i class="fa fa-trash" aria-hidden="true"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="panel" id="clock">
+        <div id="clock-icon" class="icon">
+          <i class="fa fa-calendar" aria-hidden="true"></i>
+        </div>
+        <div id="week" class="unimportant">1</div>
+        <div id="time">0:00</div>
+        <div id="day">Mon</div>
+        <div id="date">1. Jan</div>
+      </div>
+      <div class="panel" id="weather">
+        <div id="weather-icon"><i class="wi wi-day-sunny"></i></div>
+        <div id="weather-temperature">--°C</div>
+        <div id="weather-summary"></div>
+      </div>
+    </div>
+
+    <div class="page fit-grid" id="calendar">
+      <div class="panel">
+          <div class="header">Today</div>
+          <div id="calendar-agenda-today" class="agenda"></div>
+      </div>
+      <div class="panel">
+          <div class="header">4 days</div>
+          <div id="calendar-agenda-4days" class="agenda"></div>
+      </div>
+    </div>
+
+    <div class="page" id="trello">
+        <div class="panel" id="trello-todo">
+            <div class="header">Todo</div>
+            <ul></ul>
+        </div>
+        <div class="panel" id="trello-doing">
+            <div class="header">Doing</div>
+            <ul></ul>
+        </div>
+        <div class="panel" id="trello-done">
+            <div class="header">Done</div>
+            <ul></ul>
+        </div>
+    </div>
+
+    <div class="page" id="pomodoro">
+      <div class="panel" id="pomodoro-plan">
+        <div id="pomodoro-state-info">
+          Current state:
+          <span id="pomodoro-state">-1</span>
+        </div>
+        <ul></ul>
+      </div>
+      <div id="pomodoro-buttons">
+        <button class="reset" id="pomodoro-plan-clear">
+          <i class="fa fa-undo" aria-hidden="true"></i> reset
+        </button>
+        <button class="work add" data-type="work" data-minutes="25">
+          <i class="fa fa-laptop" aria-hidden="true"></i> 25′
+        </button>
+        <button class="break add" data-type="break" data-minutes="5">
+          <i class="fa fa-coffee" aria-hidden="true"></i> 5′
+        </button>
+        <button class="break add" data-type="break" data-minutes="20">
+          <i class="fa fa-coffee" aria-hidden="true"></i> 20′
+        </button>
+        <button class="break add" data-type="break" data-minutes="30">
+          <i class="fa fa-coffee" aria-hidden="true"></i> 30′
+        </button>
+      </div>
+    </div>
+
+    <div class="page" id="google">
+      <ul class="panel" id="calendars">
+      </ul>
+      <div id="google-buttons">
+        <button id="google-authorize-button" style="display: none;">Authorize</button>
+        <button id="google-signout-button" style="display: none;">Sign Out</button>
+      </div>
+    </div>
+
+    <div class="page" id="location">
+      <div class="panel" id="map"></div>
+    </div>
+
+  </div>
+
+</body>
+</html>

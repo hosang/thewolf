@@ -1,0 +1,12 @@
+{% set title = "Pomodoro" %}
+{% extends "layout.html" %}
+
+{% block body %}
+  <ul class="entries">
+  {% for day in days %}
+    <li><a href="{{ day.link }}">{{ day.day.strftime('%Y-%m-%d') }}</a></li>
+  {% else %}
+    <li><em>Unbelievable, no entries here so far!</em></li>
+  {% endfor %}
+  </ul>
+{% endblock %}
