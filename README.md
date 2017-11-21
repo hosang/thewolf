@@ -14,7 +14,7 @@ In his blog post he describes the hardware and his architecture, but doesn't
 provide code. This is an attempt at making the software starting point
 easier for anybody who would like to set up such a productivity dashboard.
 
-![Screenshot of the dashboard](https://raw.githubusercontent.com/hosang/thewolf/screenshot.png)
+![Screenshot of the dashboard](https://raw.githubusercontent.com/hosang/thewolf/master/screenshot.png)
 
 **Disclaimer:** Even though this is a best effort, I am no expert at any of
 the technologies involved. I am no designer and no web developer. Use this
