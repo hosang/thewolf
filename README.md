@@ -1,11 +1,11 @@
 # The Wolf
 
-![Image of Winston Wolfe](https://raw.githubusercontent.com/hosang/thewolf/master/thewolf/static/images/winston-good-coffee.jpg)
+![Image of Winston Wolfe](https://raw.githubusercontent.com/hosang/thewolf/master/thewolf/static/images/winston.jpg)
 
-> That's thirty minutes away. I'll be there in ten.
+> That's thirty minutes away. I'll be there in ten.  
 > — Winston Wolfe, a.k.a. The Wolf
 
-> A person who solves problems - usually with brilliant, lucid thinking under pressure and stylish charisma for galvanizing other people into action.
+> A person who solves problems - usually with brilliant, lucid thinking under pressure and stylish charisma for galvanizing other people into action.  
 > — [Lior Bar-On](https://www.urbandictionary.com/define.php?term=Winston%20Wolf)
 
 A productivity dashboard for the Raspberry Pi inspired by
