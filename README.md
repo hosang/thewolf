@@ -1,5 +1,7 @@
 # The Wolf
 
+![Image of Winston Wolfe](https://raw.githubusercontent.com/hosang/thewolf/master/thewolf/static/images/winston-good-coffee.jpg)
+
 > That's thirty minutes away. I'll be there in ten.
 > — Winston Wolfe, a.k.a. The Wolf
 
@@ -77,4 +79,3 @@ on `localhost:5000`.
 * virtualenv with requirements.txt installed
 * mysql server
 
-## Set up
