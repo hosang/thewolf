@@ -60,10 +60,10 @@ more, for example
 1. Boot from card, log in with user `pi` and password `raspberry`
 1. Change root password: `sudo passwd`
 1. Create your own user and get rid of the default user
-  1. `sudo adduser winston`
-  1. `sudo visudo`
-  1. `sudo userdel -r pi`
-  1. Switch to the new user: logout and login again
+   1. `sudo adduser winston`
+   1. `sudo visudo`
+   1. `sudo userdel -r pi`
+   1. Switch to the new user: logout and login again
 1. Configure wifi: `wpa_passphrase "essid" "password" | sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf`
 1. Reconfigure interface: `wpa_cli -i wlan0 reconfigure` (now you should be in your network)
 1. Update packages: `sudo apt update` and `sudo apt upgrade`
@@ -97,28 +97,28 @@ more, for example
 
 1. Create apache configuration: `sudo vi /etc/apache2/sites-available/thewolf.conf`  
    The file should look something like this:
-```
-<VirtualHost localhost:80>
-    ServerName localhost
+    ```
+    <VirtualHost localhost:80>
+        ServerName localhost
 
-    Alias /static/ /home/winston/thewolf/thewolf/static/
+        Alias /static/ /home/winston/thewolf/thewolf/static/
 
-    WSGIProcessGroup thewolf
-    WSGIApplicationGroup %{GLOBAL}
+        WSGIProcessGroup thewolf
+        WSGIApplicationGroup %{GLOBAL}
 
-    WSGIDaemonProcess thewolf user=winston group=winston threads=2 python-home=/home/winston/env/py35-thewolf python-path=/home/winston/thewolf
+        WSGIDaemonProcess thewolf user=winston group=winston threads=2 python-home=/home/winston/env/py35-thewolf python-path=/home/winston/thewolf
 
-    WSGIScriptAlias / /home/winston/thewolf/thewolf.wsgi
-    WSGIScriptReloading On
+        WSGIScriptAlias / /home/winston/thewolf/thewolf.wsgi
+        WSGIScriptReloading On
 
-    <Directory /home/winston/thewolf/>
-        Require all granted
-    </Directory>
-    <Directory /home/winston/thewolf/thewolf/static/>
-        Require all granted
-    </Directory>
-</VirtualHost>
-```
+        <Directory /home/winston/thewolf/>
+            Require all granted
+        </Directory>
+        <Directory /home/winston/thewolf/thewolf/static/>
+            Require all granted
+        </Directory>
+    </VirtualHost>
+    ```
 1. Enable it: `sudo ln -s /etc/apache2/sites-available/thewolf.conf /etc/apache2/sites-enabled/thewolf.conf`
 1. Restart apache to load the config: `sudo /etc/init.d/apache2 restart`
 
