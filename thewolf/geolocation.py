@@ -3,9 +3,14 @@ import subprocess
 import requests
 import json
 import plistlib
+import sys
 
 from . import app
+from . import iwlist
 
+
+def get_wifi_aps_raspi():
+    return iwlist.scan('wlan0')
 
 def get_wifi_aps_mac():
     cmd = ["/System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport", "-s", "-x"]
@@ -24,16 +29,20 @@ def get_wifi_aps_mac():
     return results
 
 def get_location():
-    access_points = get_wifi_aps_mac()
+    if sys.platform == 'darwin':
+        access_points = get_wifi_aps_mac()
+    else:
+        access_points = get_wifi_aps_raspi()
     req = {'wifi_access_points': access_points}
     url = 'https://www.googleapis.com/geolocation/v1/geolocate?key={}'.format(
             app.config['GOOGLE_API_KEY'])
     r = requests.post(
             url, data=json.dumps(req), headers={'referer': request.url})
     loc = r.json()
-    loc['latitude'] = loc['location']['lat']
-    loc['longitude'] = loc['location']['lng']
-    del loc['location']
+    if 'location' in loc:
+        loc['latitude'] = loc['location']['lat']
+        loc['longitude'] = loc['location']['lng']
+        del loc['location']
     return loc
 
 @app.route('/api/location')

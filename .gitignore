@@ -99,3 +99,10 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# vim
+.*.swp
+
+# project specific
+/config.py
+/raspi_scan_wlan

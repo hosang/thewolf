@@ -1,7 +1,7 @@
 from flask import request
 import json
 
-from . import app, get_table
+from . import app, get_table, get_db
 
 
 @app.route('/api/calendars/selected')
@@ -17,9 +17,11 @@ def calendar_clear():
 
 @app.route('/api/calendars/select/<id>', methods=['PUT', 'DELETE'])
 def calendar_select(id):
-    table = get_table('calendar')
     if 'cid' not in table.columns:
+        db = get_db()
+        table = get_table('calendar')
         table.create_column('cid', db.types.string(256))
+    table = get_table('calendar')
     if request.method == 'PUT':
         table.upsert({'cid': id}, ['cid'])
     else:
