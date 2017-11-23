@@ -39,7 +39,6 @@ def get_location():
     r = requests.post(
             url, data=json.dumps(req), headers={'referer': request.url})
     loc = r.json()
-    return loc
     loc['latitude'] = loc['location']['lat']
     loc['longitude'] = loc['location']['lng']
     del loc['location']
