@@ -1,8 +1,10 @@
 from flask import Flask
 import dataset
+import os.path
 
 
 app = Flask(__name__)
+root_dir = os.path.dirname(os.path.abspath(__file__))
 
 db = None
 def get_table(table):
@@ -13,3 +15,4 @@ def get_table(table):
 
 def query(*args, **kwargs):
     return db.query(*args, **kwargs)
+
