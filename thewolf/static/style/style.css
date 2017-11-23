@@ -28,7 +28,7 @@ body {
     margin: 0;
     color: white;
     font-family: Roboto, sans-serif;
-    background-color: #111;
+    background-color: var(--bg-color);
 }
 
 div, ul, hr {
@@ -175,7 +175,6 @@ input[type='checkbox']:after {
 
 /* navigation */
 #navigation {
-    padding: 6px 0 6px 6px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -201,14 +200,17 @@ input[type='checkbox']:after {
     border-right: 3px solid rgba(255,255,255,0.6);
 }
 
+#body {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 #container {
-    width: 480px;
-    height: 320px;
-    background-color: var(--bg-color);
 }
 
 .page {
-    padding: 6px;
 }
 
 .panel {
@@ -216,7 +218,6 @@ input[type='checkbox']:after {
     background-color: #212121;
     padding: 4px 8px;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
-/*    border-left: solid 5px #4daf4a; */
 }
 
 .flashing {
@@ -232,6 +233,8 @@ input[type='checkbox']:after {
 .page { grid-area: page; }
 #container {
     display: grid;
+    width: calc(100% - 12px);
+    height: calc(100% - 12px);
     grid-gap: 8px;
     grid-template-columns: min-content auto;
     grid-template-areas:
