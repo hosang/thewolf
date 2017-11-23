@@ -61,13 +61,23 @@ more, for example
 1. Change root password: `sudo passwd`
 1. Create your own user and get rid of the default user
    1. `sudo adduser winston`
-   1. `sudo visudo`
+   1. Add new user to the sudoers config: `sudo visudo` (or change the files in `/etc/visudo.d/`)
    1. `sudo userdel -r pi`
    1. Switch to the new user: logout and login again
-1. Configure wifi: `wpa_passphrase "essid" "password" | sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf`
+1. Configure wifi: `wpa_passphrase "essid" "password" | sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf`, then edit the file and remove the plaintext password
 1. Reconfigure interface: `wpa_cli -i wlan0 reconfigure` (now you should be in your network)
 1. Update packages: `sudo apt update` and `sudo apt upgrade`
-1. Install necessary packages: `sudo apt install xserver-xorg chromium-browser python3.5 python3.5-dev virtualenv apache2 libapache2-mod-wsgi mysql-client mysql-server default-libmysqlclient-dev git`
+1. Install necessary packages: `sudo apt install lightdm lxde chromium-browser python3.5 python3.5-dev virtualenv apache2 libapache2-mod-wsgi-py3 mysql-client mysql-server default-libmysqlclient-dev git`
+1. Configure the grafical interface
+   1. `sudo vim /etc/xdg/lxsession/LXDE/autostart` and append the following:
+   ```
+   xset s off         # don't activate screensaver 
+   xset -dpms         # disable DPMS (Energy Star) features. 
+   xset s noblank     # don't blank the video device
+   @unclutter -idle 1
+   @chromium-browser --incognito --kiosk http://localhost/static/dashboard.html
+   ```
+   1. `sudo raspi-config`: under `Boot Options > Desktop/CLI` choose `B4 Desktop Autologin` 
 
 #### Create Mysql user and database
 
@@ -86,6 +96,7 @@ more, for example
    1. Trello: get you [key and token](https://trello.com/app-key); get the key of the board you want to use by visiting it, adding .json to the end of the URL and look it up in the "id" field
    1. [Google](https://console.developers.google.com/project/_/apiui/apis/library): Generate an API key and a client ID, you can specify localhost as the requesting hostname if you want. You should add the following APIs to the project: Calendar API, Maps Geolocation API, Maps JavaScript API
    1. Database information: In the `Deploy` class set `DATABASE_URI` to something like `mysql://thewolf:somepassword@localhost/thewolf` (according to what you have created in the previous section).
+1. Prepare the wlan scanning script, will use sudo: `make`
 
 #### Python
 
@@ -126,6 +137,41 @@ more, for example
 
 1. `git clone https://github.com/goodtft/LCD-show.git`
 1. `sh LCD35-show`
+1. rotate screen, change line at end of file to `dtoverlay=tft35a:rotate=270,swapxy=1` in `/boot/config.txt`
+1. also change `/etc/X11/xorg.conf.d/99-calibration.conf` to the following:
+   ```
+Section "InputClass"
+        Identifier      "calibration"
+        MatchProduct    "ADS7846 Touchscreen"
+        Option  "Calibration"   "3936 227 268 3880"
+        Option "InvertX" "true"
+        Option "InvertY" "true"
+EndSection
+
+Section "Device"
+        # WaveShare SpotPear 3.5", framebuffer 1
+        Identifier "uga"
+        driver "fbdev"
+        Option "fbdev" "/dev/fb1"
+        Option "ShadowFB" "off"
+EndSection
+
+Section "Monitor"
+        # Primary monitor. WaveShare SpotPear 480x320
+        Identifier "WSSP"
+EndSection
+
+Section "Screen"
+        Identifier "primary"
+        Device "uga"
+        Monitor "WSSP"
+EndSection
+
+Section "ServerLayout"
+        Identifier "default"
+        Screen 0 "primary" 0 0
+EndSection
+   ```
 
 ### Debugging
 
@@ -138,3 +184,16 @@ on `localhost:5000`.
 * virtualenv with requirements.txt installed
 * mysql server
 
+
+## Credits
+
+I used the following products/services/projects and I am grateful for their
+work. Without them thise kind of project would be impossible. If you're one
+of them and require anything from this project (for example a specific license)
+please let me know!
+
+* [Dark Sky](https://darksky.net)
+* [Font Awesome](http://fontawesome.io)
+* [Google API](https://developers.google.com)
+* [Google fonts](https://fonts.google.com)
+* [Weather Icons](http://erikflowers.github.io/weather-icons/)
