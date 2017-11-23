@@ -39,9 +39,10 @@ def get_location():
     r = requests.post(
             url, data=json.dumps(req), headers={'referer': request.url})
     loc = r.json()
-    loc['latitude'] = loc['location']['lat']
-    loc['longitude'] = loc['location']['lng']
-    del loc['location']
+    if 'location' in loc:
+        loc['latitude'] = loc['location']['lat']
+        loc['longitude'] = loc['location']['lng']
+        del loc['location']
     return loc
 
 @app.route('/api/location')
