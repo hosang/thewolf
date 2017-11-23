@@ -1,7 +1,7 @@
 from flask import render_template
 import random
 
-from .core import app, get_table, query
+from .core import app, get_table, query, get_db, root_dir
 from . import calendar, keys, weather, geolocation, pomodoro, tasks
 
 

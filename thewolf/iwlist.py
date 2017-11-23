@@ -2,7 +2,7 @@ import re
 import subprocess
 import os.path
 
-from .core import app, root_dir
+from . import app, root_dir
 
 
 macRE = re.compile(r'BSS (?P<macAddress>[0-9a-fA-F:]+)\(on .+?\)( -- associated)?$')

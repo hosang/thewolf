@@ -7,6 +7,9 @@ app = Flask(__name__)
 root_dir = os.path.dirname(os.path.abspath(__file__))
 
 db = None
+def get_db():
+    return db
+
 def get_table(table):
     global db
     if db is None:
