@@ -44,6 +44,17 @@ through wsgi and that saves everything into a mysql database.
 1. Pomodoro timer with plan
 1. Bookkeeping of past pomodoro sessions and finished tasks
 
+## (optional) Touch screen
+
+I bought the Kuman SC11-3.5INCH-UK (https://www.amazon.de/gp/product/B01FX7909Q/).
+I am not sure I would recommend it. The display is a little loose in the case
+and basically only supported by the GPIO pins, so I don't have long life
+expectations. The display is a little slow, which may be normal. I was able to
+install the drivers into a Raspbian Lite installation, so at least I didn't
+have to use the shipped image (which would probably break after a dist-upgrade.
+
+Please let me know if you find a better one!
+
 ## Installing
 
 ### General
