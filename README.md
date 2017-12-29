@@ -151,37 +151,37 @@ more, for example
 1. rotate screen, change line at end of file to `dtoverlay=tft35a:rotate=270,swapxy=1` in `/boot/config.txt`
 1. also change `/etc/X11/xorg.conf.d/99-calibration.conf` to the following:
    ```
-Section "InputClass"
-        Identifier      "calibration"
-        MatchProduct    "ADS7846 Touchscreen"
-        Option  "Calibration"   "3936 227 268 3880"
-        Option "InvertX" "true"
-        Option "InvertY" "true"
-EndSection
+   Section "InputClass" 
+           Identifier      "calibration"
+           MatchProduct    "ADS7846 Touchscreen"
+           Option  "Calibration"   "3936 227 268 3880"
+           Option "InvertX" "true"
+           Option "InvertY" "true"
+   EndSection
 
-Section "Device"
-        # WaveShare SpotPear 3.5", framebuffer 1
-        Identifier "uga"
-        driver "fbdev"
-        Option "fbdev" "/dev/fb1"
-        Option "ShadowFB" "off"
-EndSection
+   Section "Device"
+           # WaveShare SpotPear 3.5", framebuffer 1
+           Identifier "uga"
+           driver "fbdev"
+           Option "fbdev" "/dev/fb1"
+           Option "ShadowFB" "off"
+   EndSection
 
-Section "Monitor"
-        # Primary monitor. WaveShare SpotPear 480x320
-        Identifier "WSSP"
-EndSection
+   Section "Monitor"
+           # Primary monitor. WaveShare SpotPear 480x320
+           Identifier "WSSP"
+   EndSection
 
-Section "Screen"
-        Identifier "primary"
-        Device "uga"
-        Monitor "WSSP"
-EndSection
+   Section "Screen"
+           Identifier "primary"
+           Device "uga"
+           Monitor "WSSP"
+   EndSection
 
-Section "ServerLayout"
-        Identifier "default"
-        Screen 0 "primary" 0 0
-EndSection
+   Section "ServerLayout"
+           Identifier "default"
+           Screen 0 "primary" 0 0
+   EndSection
    ```
 
 ### Debugging
