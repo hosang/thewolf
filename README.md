@@ -44,6 +44,17 @@ through wsgi and that saves everything into a mysql database.
 1. Pomodoro timer with plan
 1. Bookkeeping of past pomodoro sessions and finished tasks
 
+## (optional) Touch screen
+
+I bought the Kuman SC11-3.5INCH-UK (https://www.amazon.de/gp/product/B01FX7909Q/).
+I am not sure I would recommend it. The display is a little loose in the case
+and basically only supported by the GPIO pins, so I don't have long life
+expectations. The display is a little slow, which may be normal. I was able to
+install the drivers into a Raspbian Lite installation, so at least I didn't
+have to use the shipped image (which would probably break after a dist-upgrade.
+
+Please let me know if you find a better one!
+
 ## Installing
 
 ### General
@@ -140,37 +151,37 @@ more, for example
 1. rotate screen, change line at end of file to `dtoverlay=tft35a:rotate=270,swapxy=1` in `/boot/config.txt`
 1. also change `/etc/X11/xorg.conf.d/99-calibration.conf` to the following:
    ```
-Section "InputClass"
-        Identifier      "calibration"
-        MatchProduct    "ADS7846 Touchscreen"
-        Option  "Calibration"   "3936 227 268 3880"
-        Option "InvertX" "true"
-        Option "InvertY" "true"
-EndSection
+   Section "InputClass" 
+           Identifier      "calibration"
+           MatchProduct    "ADS7846 Touchscreen"
+           Option  "Calibration"   "3936 227 268 3880"
+           Option "InvertX" "true"
+           Option "InvertY" "true"
+   EndSection
 
-Section "Device"
-        # WaveShare SpotPear 3.5", framebuffer 1
-        Identifier "uga"
-        driver "fbdev"
-        Option "fbdev" "/dev/fb1"
-        Option "ShadowFB" "off"
-EndSection
+   Section "Device"
+           # WaveShare SpotPear 3.5", framebuffer 1
+           Identifier "uga"
+           driver "fbdev"
+           Option "fbdev" "/dev/fb1"
+           Option "ShadowFB" "off"
+   EndSection
 
-Section "Monitor"
-        # Primary monitor. WaveShare SpotPear 480x320
-        Identifier "WSSP"
-EndSection
+   Section "Monitor"
+           # Primary monitor. WaveShare SpotPear 480x320
+           Identifier "WSSP"
+   EndSection
 
-Section "Screen"
-        Identifier "primary"
-        Device "uga"
-        Monitor "WSSP"
-EndSection
+   Section "Screen"
+           Identifier "primary"
+           Device "uga"
+           Monitor "WSSP"
+   EndSection
 
-Section "ServerLayout"
-        Identifier "default"
-        Screen 0 "primary" 0 0
-EndSection
+   Section "ServerLayout"
+           Identifier "default"
+           Screen 0 "primary" 0 0
+   EndSection
    ```
 
 ### Debugging
