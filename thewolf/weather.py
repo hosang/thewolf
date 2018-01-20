@@ -20,6 +20,7 @@ def cache_weather(longitude, latitude):
         url = 'https://api.darksky.net/forecast/{key}/{longitude},{latitude}?units=si&exclude=daily,hourly'.format(
                 key=app.config['DARKSKY_KEY'], longitude=longitude, latitude=latitude)
         response = requests.get(url)
+        app.logger.debug(response.text)
         row = {
             'timestamp': now,
             'response': response.text,

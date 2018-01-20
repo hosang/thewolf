@@ -30,7 +30,6 @@ body {
     font-family: Roboto, sans-serif;
     background-color: var(--bg-color);
     user-select: none;
-    cursor: none;
 }
 
 div, ul, hr {
@@ -465,7 +464,6 @@ input[type='checkbox']:after {
 #trello-doing { grid-area: doing; }
 #trello-done { grid-area: done; }
 #trello {
-    height: 320px;
     display: grid;
     grid-gap: 6px;
     grid-template-rows: min-content(200px) auto;
@@ -506,10 +504,6 @@ input[type='checkbox']:after {
     color: #f7bc33;
 }
 
-#trello li {
-    max-height: 4em;
-    overflow-y: hidden;
-}
 #trello-doing li div {
     font-size: 14px;
 }
@@ -524,6 +518,7 @@ input[type='checkbox']:after {
 #trello-done li {
     background-color: inherit;
     margin-bottom: .5ex;
+    overflow-x: auto;
 }
 
 /*************************************************************************
@@ -669,3 +664,24 @@ input[type='checkbox']:after {
     display: grid;
 }
 
+/*************************************************************************
+ * Productivity
+ */
+#productivity {
+    display: grid;
+    grid-gap: 14px;
+    grid-template-rows: auto min-content;
+}
+
+#prod-buttons {
+    display: grid;
+    grid-gap: 14px;
+    grid-template-columns: repeat(5, 1fr);
+}
+
+#prod-buttons button {
+    font-size: 14px;
+    white-space: nowrap;
+    height: 50px;
+    background-color: var(--work-color);
+}

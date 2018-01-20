@@ -1,62 +1,33 @@
 $(function() {
-    var SCOPE = 'https://www.googleapis.com/auth/calendar.readonly';
-    var DISCOVERY_DOCS = [
-        "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest",
-    ];
+    $('#google-authorize-button').hide();
+    $('#google-signout-button').hide();
 
-    var GoogleAuth;
-
-    function initClient() {
-        new Promise(function(resolve, reject) {
-            $.get('/api/keys/google').done(function(data) {
-                resolve(data.client_id, data.api_key);
-            }).fail(function(err) {
-                reject(err);
-            });
-        }).then((client_id, api_key) => gapi.client.init({
-            apiKey: api_key,
-            clientId: client_id,
-            scope: SCOPE,
-            discoveryDocs: DISCOVERY_DOCS,
-        })).then(function() {
-            // Listen for sign-in state changes.
-            gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-
-            // Handle the initial sign-in state.
-            updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-            $('#google-authorize-button').click(function() {
-                gapi.auth2.getAuthInstance().signIn();
-            });
-            $('#google-signout-button').click(function() {
-                gapi.auth2.getAuthInstance().signOut();
-            });
+    $('#google-authorize-button').click(function() {
+        window.location.href = '/api/auth/google';
+    });
+    $('#google-signout-button').click(function() {
+        Loadbar.inc();
+        $.get('/api/auth/google/revoke').done(function() {
+            $('#google-authorize-button').show();
+            $('#google-signout-button').hide();
+        }).always(function() {
+            Loadbar.dec();
         });
-    };
-    gapi.load('client:auth2', initClient);
-
-    function updateSigninStatus(isSignedIn) {
-      if (isSignedIn) {
-        $('#google-authorize-button').css('display', 'none');
-        $('#google-signout-button').css('display', 'block');
-        listCalendars();
-      } else {
-        $('#google-authorize-button').css('display', 'block');
-        $('#google-signout-button').css('display', 'none');
-      }
-    }
+    });
 
     function listCalendars() {
         Loadbar.inc();
-        gapi.client.calendar.calendarList.list({
-            fields: 'items(description,id,primary,selected,summary,summaryOverride)',
-            showHidden: false,
-        }).then(function(response) {
-            var calendars = response.result.items;
+        $.get('/api/calendars/list').done(function(response) {
+            $('#google-authorize-button').hide();
+            $('#google-signout-button').show();
+
+            var calendars = response.calendars.items,
+                selected = response.selection;
             $('#calendars').empty();
             $.each(calendars, function(idx, cal) {
                 var name = cal.summaryOverride ? cal.summaryOverride : cal.summary;
                 var checkbox = $('<input/>', {type: 'checkbox'});
-                if (cal.selected) checkbox.attr('checked', '');
+                if (selected[cal.id]) checkbox.attr('checked', '');
                 $('#calendars').append(
                     $('<li/>').append(
                         $('<label/>')
@@ -66,12 +37,17 @@ $(function() {
                             .append(name)
                 ));
             });
-            Loadbar.dec();
-            restoreSelection();
-        }).catch(function(err) {
+            refreshAgenda();
+        }).fail(function(err) {
             console.error(err);
+            $('#google-authorize-button').show();
+            $('#google-signout-button').hide();
+        }).always(function() {
+            Loadbar.dec();
         });
     }
+    listCalendars();
+    $('#refresh').click(listCalendars);
 
     function updateCheckbox() {
         var self = $(this);
@@ -83,84 +59,18 @@ $(function() {
         refreshAgenda();
     }
 
-    function saveSelection() {
-        $.ajax('/api/calendars/selected', {method: 'delete'}).done(function() {
-            $.each($('#calendars label'), function(idx, label) {
-                label = $(label);
-                var checked = label.children('input').is(':checked');
-                if (checked) {
-                    $.ajax('/api/calendars/select/' +
-                        encodeURIComponent(label.data('id')),
-                        {method: 'put'});
-                }
-            });
-            refreshAgenda();
-        });
-    }
-
-    function restoreSelection() {
-        $.get('/api/calendars/selected').done(function(ids) {
-            if ($.isEmptyObject(ids)) {
-                saveSelection();
-                return;
-            }
-            $.each($('#calendars label'), function(idx, label) {
-                label = $(label);
-                if (ids[label.data('id')]) {
-                    label.children('input').attr('checked', '');
-                } else {
-                    label.children('input').removeAttr('checked');
-                }
-            });
-            refreshAgenda();
-        });
-    }
-
     function refreshAgenda() {
-        listUpcomingEvents(1, $('#calendar-agenda-today'));
-        listUpcomingEvents(1, $('#agenda-today-list'));
-        listUpcomingEvents(4, $('#calendar-agenda-4days'));
+        listEvents(1, $('#calendar-agenda-today'));
+        listEvents(1, $('#agenda-today-list'));
+        listEvents(4, $('#calendar-agenda-4days'));
     }
-    $('#refresh').click(refreshAgenda);
 
-    function listUpcomingEvents(numDays, eventlist) {
+    function listEvents(numDays, eventlist) {
         var includeDate = numDays > 1;
-        var ids = $('#calendars label :checkbox:checked').parents().map(function() {
-            return $(this).data('id');
-        }).get();
-        if (ids.length == 0) {
-            eventlist.empty();
-            return;
-        }
-
-        var now = new Date()
-        var day_start = new Date(now.getTime());
-        day_start.setHours(0, 0, 0, 0);
-        var day_end = new Date(now.getTime());
-        day_end.setDate(day_end.getDate() + numDays - 1);
-        day_end.setHours(23, 59, 59, 999);
-
-
-        var batch = gapi.client.newBatch();
-        $.each(ids, function(idx, id) {
-            batch.add(gapi.client.calendar.events.list({
-              'calendarId': id,
-              'timeMin': day_start.toISOString(),
-              'timeMax': day_end.toISOString(),
-              'showDeleted': false,
-              'singleEvents': true,
-              'maxResults': 10,
-              'orderBy': 'startTime',
-              'fields': 'items(start(date,dateTime),end(date,dateTime),summary)',
-            }));
-        });
         Loadbar.inc();
-        batch.then(function(response) {
-            Loadbar.dec();
-            var events = [];
-            $.each(response.result, function(key, resp) {
-                events = events.concat(resp.result.items);
-            });
+        $.get('/api/calendars/events?days=' + numDays).done(function(response) {
+            var events = response.events,
+                now = new Date();
             events.map(function(event) {
                 event.start.hasDateTime = event.start.hasOwnProperty('dateTime');
                 if (event.start.hasDateTime) {
@@ -216,6 +126,10 @@ $(function() {
                 eventlist.append(
                     $('<span/>', {'class': 'summary' + cl}).text(event.summary));
             });
+        }).fail(function(err) {
+            console.error(err);
+        }).always(function() {
+            Loadbar.dec();
         });
       }
 

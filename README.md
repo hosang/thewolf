@@ -67,7 +67,7 @@ more, for example
 1. Configure wifi: `wpa_passphrase "essid" "password" | sudo tee -a /etc/wpa_supplicant/wpa_supplicant.conf`, then edit the file and remove the plaintext password
 1. Reconfigure interface: `wpa_cli -i wlan0 reconfigure` (now you should be in your network)
 1. Update packages: `sudo apt update` and `sudo apt upgrade`
-1. Install necessary packages: `sudo apt install lightdm lxde chromium-browser python3.5 python3.5-dev virtualenv apache2 libapache2-mod-wsgi-py3 mysql-client mysql-server default-libmysqlclient-dev git`
+1. Install necessary packages: `sudo apt install lightdm lxde unclutter chromium-browser python3.5 python3.5-dev virtualenv apache2 libapache2-mod-wsgi-py3 mysql-client mysql-server default-libmysqlclient-dev git`
 1. Configure the grafical interface
    1. `sudo vim /etc/xdg/lxsession/LXDE/autostart` and append the following:
    ```

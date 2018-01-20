@@ -20,7 +20,9 @@
   <script src="js/google.js"></script>
   <script src="js/trello.js"></script>
   <script src="js/pomodoro.js"></script>
-  <script src="https://apis.google.com/js/api.js"></script>
+  <script src="js/productivity.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  
 </head>
 
 <body>
@@ -46,7 +48,7 @@
       <button data-page="pomodoro" class="nav">
         <i class="fa fa-hourglass" aria-hidden="true"></i>
       </button>
-      <button data-page="productivity" class="nav">
+      <button data-page="productivity" class="nav" id="productivity-button">
         <i class="fa fa-tachometer" aria-hidden="true"></i>
       </button>
       <button data-page="google" class="nav">
@@ -54,6 +56,9 @@
       </button>
       <button data-page="location" class="nav" id="location-button">
         <i class="fa fa-map-marker" aria-hidden="true"></i>
+      </button>
+      <button id="settings" class="nav">
+        <i class="fa fa-cog" aria-hidden="true"></i>
       </button>
       <button id="refresh">
         <i class="fa fa-refresh" aria-hidden="true"></i>
@@ -125,7 +130,7 @@
       </div>
     </div>
 
-    <div class="page" id="trello">
+    <div class="page fit-grid" id="trello">
         <div class="panel" id="trello-todo">
             <div class="header">Todo</div>
             <ul></ul>
@@ -171,13 +176,30 @@
       <ul class="panel" id="calendars">
       </ul>
       <div id="google-buttons">
-        <button id="google-authorize-button" style="display: none;">Authorize</button>
-        <button id="google-signout-button" style="display: none;">Sign Out</button>
+        <button id="google-authorize-button">
+            <i class="fa fa-sign-in" aria-hidden="true"></i>
+            Authorize
+        </button>
+        <button id="google-signout-button">
+            <i class="fa fa-sign-out" aria-hidden="true"></i>
+            Sign Out
+        </button>
       </div>
     </div>
 
     <div class="page" id="location">
       <div class="panel" id="map"></div>
+    </div>
+
+    <div class="page fit-grid" id="productivity">
+      <div class="panel" id="prod-graph"></div>
+      <div id="prod-buttons">
+        <button data-days="7">1 week</button>
+        <button data-days="14">2 weeks</button>
+        <button data-days="28">4 weeks</button>
+        <button data-days="182">½ year</button>
+        <button data-days="364">1 year</button>
+      </div>
     </div>
 
   </div>

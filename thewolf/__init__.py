@@ -2,7 +2,7 @@ from flask import render_template
 import random
 
 from .core import app, get_table, query, get_db, root_dir
-from . import calendar, keys, weather, geolocation, pomodoro, tasks
+from . import calendar, keys, weather, geolocation, pomodoro, tasks, google_auth
 
 
 __all__ = ['app']
